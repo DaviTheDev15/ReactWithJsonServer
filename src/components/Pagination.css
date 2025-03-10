@@ -1,0 +1,20 @@
+.paginacao {
+    width: 40px;
+    height: 40px;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 16px;
+    margin: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #386BC0;
+    color:white;
+    border-color: black;
+}
+
+.paginacao:hover {
+    font-weight: 900;
+    border-color: #101010;
+    color: black;
+}
