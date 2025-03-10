@@ -19,8 +19,8 @@ const Footer = () => {
             <MDBRow className="mt-3 pt-3">
               <MDBCol md="3" lg="4" xl="3" className="mx-auto mb-4">
                 <h6 className="text-uppercase fw-bold mb-4">
-                  <MDBIcon color="secondary" icon="tractor" className="me-3" />
-                  IF Feiras
+                  <MDBIcon color="secondary" icon="school" className="me-3" />
+                  IFPB Campus Guarabira
                 </h6>
                 <p>
                   Here you can use rows and columns to organize your footer
