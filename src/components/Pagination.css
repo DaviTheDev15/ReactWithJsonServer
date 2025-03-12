@@ -1,20 +1,27 @@
-.paginacao {
-    width: 40px;
-    height: 40px;
-    font-family: inherit;
-    font-weight: 600;
-    font-size: 16px;
-    margin: 10px;
-    border-radius: 10px;
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+  }
+  
+  .pagination-button {
+    padding: 8px 16px;
+    margin: 0 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    background: #386BC0;
-    color:white;
-    border-color: black;
-}
-
-.paginacao:hover {
-    font-weight: 900;
-    border-color: #101010;
-    color: black;
-}
+  }
+  
+  .pagination-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .pagination-info {
+    margin: 0 10px;
+    font-weight: bold;
+  }
+  

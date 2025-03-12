@@ -7,12 +7,14 @@ import {
 } from 'mdb-react-ui-kit';
 import { useEffect, useState } from 'react';
 import Pagination from './Pagination';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const PropriedadesTable = ({ propriedades, setPropriedades }) => {
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [postPerPage, setPostPerPage] = useState(100)
+  const [postPerPage, setPostPerPage] = useState(10)
 
   const getPropriedades = (event) => {
     fetch('http://localhost:4000/instituicoes')
@@ -23,6 +25,21 @@ const PropriedadesTable = ({ propriedades, setPropriedades }) => {
       .catch((error) => {
         console.log('Deu erro!');
       });
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:4000/instituicoes/${id}`, {
+        method: 'DELETE',
+      });
+  
+      if (response.ok) {
+        toast.success("A instituição foi removida com sucesso!");
+        getPropriedades();
+      }
+    } catch (error) {
+      toast.error("Erro ao tentar remover a instituição!");
+    }
   };
 
   useEffect(getPropriedades, []);
@@ -61,7 +78,7 @@ const PropriedadesTable = ({ propriedades, setPropriedades }) => {
                     <MDBIcon fas icon="pen" />
                   </MDBBtn>
 
-                  <MDBBtn floating tag="a" className="mx-2" color="danger">
+                  <MDBBtn floating tag="a" className="mx-2" color="danger" onClick={() => handleDelete(propriedades.id)}>
                     <MDBIcon fas icon="trash-alt" />
                   </MDBBtn>
                 </td>
@@ -73,8 +90,9 @@ const PropriedadesTable = ({ propriedades, setPropriedades }) => {
       <Pagination
         totalPosts={propriedades.length}
         postsPerPage={postPerPage}
+        currentPage={currentPage} // Adiciona isso aqui!
         setCurrentPage={setCurrentPage}
-      />
+    />
     </>
   );
 };

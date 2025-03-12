@@ -2,50 +2,57 @@ import { MDBInput, MDBTooltip } from 'mdb-react-ui-kit';
 import PropriedadesTable from '../components/PropriedadesTable';
 import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
 import { useState } from 'react';
+import { useFormik } from 'formik';
+import { schema } from '../components/ValidationSchema';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const Propriedades = () => {
   let [propriedades, setPropriedades] = useState([]);
 
   let [show, setShow] = useState(false);
-  const handleShow = () => setShow(!show);
-
-  let [inputs, setInputs] = useState({
-    NO_ENTIDADE: '',
-    NO_UF: '',
-    NO_MUNICIPIO: '',
-    NO_MESORREGIAO: '',
-    NO_MICRORREGIAO: '',
-    NO_REGIAO:'',
-    QT_MAT_BAS:'',
-  });
-
-  const handleChange = (event) => {
-    let name = event.target.name;
-    setInputs({ ...inputs, [name]: event.target.value });
+  const handleShow = () => {
+    formik.resetForm();
+    setShow(!show)
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    //POST, PUT e DELETE
-    fetch('http://localhost:4000/instituicoes', {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(inputs),
-    })
-      .then((response) => {
-        if (response.ok) {
-          //Adicionar na lista.
-          setPropriedades([...propriedades, inputs]);
-          //Fechar o modal.
-          setShow(!show);
-        }
+  const formik = useFormik({
+    initialValues: {
+      NO_ENTIDADE: '',
+      NO_UF: '',
+      NO_MUNICIPIO: '',
+      NO_MESORREGIAO: '',
+      NO_MICRORREGIAO: '',
+      NO_REGIAO: '',
+      QT_MAT_BAS: '',
+    },
+    validationSchema: schema,
+    onSubmit: values => {
+      //POST, PUT e DELETE
+      fetch('http://localhost:4000/instituicoes', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
       })
-      .catch((error) => {});
-  };
+        .then((response) => {
+          if (response.ok) {
+            toast.success("Uma nova instituição foi adicionada com sucesso!");
+            //Adicionar na lista.
+            setPropriedades([...propriedades, values]);
+            //Fechar o modal.
+            setShow(!show);
+          }
+        })
+        .catch((error) => {
+          toast.error("Erro ao adicionar uma nova instituição!");
+        });
+    }
+  });
 
   return (
     <>
@@ -82,7 +89,7 @@ const Propriedades = () => {
         <Modal.Header closeButton>
           <Modal.Title id="example-modal-sizes-title-lg">Cadastrar</Modal.Title>
         </Modal.Header>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={formik.handleSubmit}>
           <Modal.Body>
             <Form.Group className="mb-3">
               <Form.Label>Entidade</Form.Label>
@@ -91,9 +98,10 @@ const Propriedades = () => {
                 placeholder="Nome da Instituição"
                 id="NO_ENTIDADE"
                 name="NO_ENTIDADE"
-                value={inputs.NO_ENTIDADE}
-                onChange={handleChange}
+                value={formik.values.NO_ENTIDADE}
+                onChange={formik.handleChange}
               />
+              <span>{formik.errors.NO_ENTIDADE}</span>
             </Form.Group>
 
             <Form.Group className="mb-3">
@@ -103,9 +111,10 @@ const Propriedades = () => {
                 placeholder='Nome da Unidade Federativa'
                 id="NO_UF"
                 name="NO_UF"
-                value={inputs.NO_UF}
-                onChange={handleChange}
+                value={formik.values.NO_UF}
+                onChange={formik.handleChange}
               />
+              <span>{formik.errors.NO_UF}</span>
             </Form.Group>
 
             <Form.Group className="mb-3">
@@ -115,9 +124,10 @@ const Propriedades = () => {
                 placeholder='Nome do Município'
                 id="NO_MUNICIPIO"
                 name="NO_MUNICIPIO"
-                value={inputs.NO_MUNICIPIO}
-                onChange={handleChange}
+                value={formik.values.NO_MUNICIPIO}
+                onChange={formik.handleChange}
               />
+              <span>{formik.errors.NO_MUNICIPIO}</span>
             </Form.Group>
 
             <Form.Group className="mb-3">
@@ -127,9 +137,10 @@ const Propriedades = () => {
                 placeholder="Nome da Mesorregião"
                 id="NO_MESORREGIAO"
                 name="NO_MESORREGIAO"
-                value={inputs.NO_MESORREGIAO}
-                onChange={handleChange}
+                value={formik.values.NO_MESORREGIAO}
+                onChange={formik.handleChange}
               />
+              <span>{formik.errors.NO_MESORREGIAO}</span>
             </Form.Group>
 
             <Form.Group className="mb-3">
@@ -139,9 +150,10 @@ const Propriedades = () => {
                 placeholder="Nome da Microrregião"
                 id="NO_MICRORREGIAO"
                 name="NO_MICRORREGIAO"
-                value={inputs.NO_MICRORREGIAO}
-                onChange={handleChange}
+                value={formik.values.NO_MICRORREGIAO}
+                onChange={formik.handleChange}
               />
+              <span>{formik.errors.NO_MICRORREGIAO}</span>
             </Form.Group>
 
             <Form.Group className="mb-3">
@@ -151,9 +163,10 @@ const Propriedades = () => {
                 placeholder="Nome da Região"
                 id="NO_REGIAO"
                 name="NO_REGIAO"
-                value={inputs.NO_REGIAO}
-                onChange={handleChange}
+                value={formik.values.NO_REGIAO}
+                onChange={formik.handleChange}
               />
+              <span>{formik.errors.NO_REGIAO}</span>
             </Form.Group>
 
             <Form.Group className="mb-3">
@@ -163,10 +176,12 @@ const Propriedades = () => {
                 placeholder="Quantidade de Matriculas"
                 id="QT_MAT_BAS"
                 name="QT_MAT_BAS"
-                value={inputs.QT_MAT_BAS}
-                onChange={handleChange}
+                value={formik.values.QT_MAT_BAS}
+                onChange={formik.handleChange}
               />
+              <span>{formik.errors.QT_MAT_BAS}</span>
             </Form.Group>
+
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleShow}>
@@ -178,6 +193,7 @@ const Propriedades = () => {
           </Modal.Footer>
         </Form>
       </Modal>
+      <ToastContainer />
     </>
   );
 };
